@@ -1,18 +1,13 @@
-  var http        = require('http'),
-      request     = require('request'),
-      querystring = require('querystring');
+var service = require('./service')
+var request = require('request')
 
 function changeLightState(state) {
   var textState = state ? "On" : "Off"
   var message = "Switching Lights " + textState
   console.log(message)
-  
-  request.get("http://localhost:4000?say=" + querystring.escape(message), function(err) {
-    if (err) {
-      return console.error("Couldnt request voice server", err)
-    }
-  });
 
+  service.talk(message)
+  
   request.post("http://localhost:5000/api/device/Lights?state=" + textState.toLowerCase(), function(err) {
     if (err) {
       return console.error("Couldnt post to light server", err)
@@ -27,7 +22,7 @@ function toggleLight() {
   });
 }
 
-function processCommand(command) {
+service.start("light_control", function(command) {
   console.log(command)
 
   if (command.on_off != undefined) {
@@ -43,29 +38,4 @@ function processCommand(command) {
       changeLightState(0)
     }
   }
-}
-
-function createServer(port) {
-  http.createServer(function (req, res) {
-    var body = "";
-
-    req.on('data', function (chunk) {
-      body += chunk;
-    })
-
-    req.on('end', function () {
-      res.writeHead(200, {'Access-Control-Allow-Origin': '*'})
-      res.end('OK!');
-
-      var formData = JSON.parse(body);
-      processCommand(formData)
-    });
-
-  }).listen(port)
-}
-
-function start() {
-  createServer(8100)
-}
-
-start()
+});
