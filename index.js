@@ -2,8 +2,6 @@
       request     = require('request'),
       querystring = require('querystring');
 
-//curl -X POST -v --data '{"email":"andykent","password":"gsrX7LfV4wvNVo"}' https://api.pinocc.io/v1/login
-
 function changeLightState(state) {
   var textState = state ? "On" : "Off"
   var message = "Switching Lights " + textState
@@ -23,7 +21,6 @@ function changeLightState(state) {
 }
 
 function toggleLight() {
-  console.log("hello")
   request.get("http://localhost:5000/api/device/Lights", function(err, response) {
     var lightState = JSON.parse(response.body).state
     changeLightState(!lightState)
