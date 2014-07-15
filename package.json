@@ -9,9 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "empty-port": "0.0.1",
+    "env-settings": "^0.2.7",
+    "faye": "^1.0.3",
     "pinoccio": "~0.1.2",
     "querystring": "~0.2.0",
-    "request": "~2.34.0",
-    "empty-port": "0.0.1"
+    "request": "~2.34.0"
   }
 }

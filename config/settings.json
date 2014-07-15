@@ -1,0 +1,14 @@
+{
+  "default": {
+    "say": "http://localhost:4000",
+    "brain": "http://localhost:8080"
+  },
+  "development": {
+    "say": "http://localhost:4000",
+    "brain": "http://localhost:8080"
+  },
+  "production": {
+    "say": "http://assistant-say.herokuapp.com",
+    "brain": "http://assistant-detection.herokuapp.com"
+  }
+}
