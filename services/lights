@@ -15,7 +15,7 @@
 case "$1" in
     start)
         echo "Starting Lights Sensor"
-        PATH=$PATH:/home/pi/node/bin NODE_ENV=production node /home/pi/lights/current/index.js
+        PATH=$PATH:/home/pi/node/bin NODE_ENV=production node /home/pi/lights/current/index.js > /home/pi/lights/current/log/std.out &
         ;;
     stop)
         echo "Stopping servoblaster"

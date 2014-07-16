@@ -31,7 +31,10 @@ task :setup => :environment do
 end
 
 task :service => :environment do
-  
+  queue! %[sudo rm -f /etc/init.d/lights]
+  queue! %[sudo ln -s #{deploy_to}/current/services/lights /etc/init.d/lights]
+  queue! %[chmod +x /etc/init.d/lights]
+  queue! %[sudo update-rc.d /etc/init.d/lights defaults]
 end
 
 task :npm => :environment do
