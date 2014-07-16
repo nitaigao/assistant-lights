@@ -35,6 +35,11 @@ task :service => :environment do
   queue! %[sudo ln -s #{deploy_to}/current/services/lights /etc/init.d/lights]
   queue! %[chmod +x /etc/init.d/lights]
   queue! %[sudo update-rc.d lights defaults]
+
+  queue! %[sudo rm -f /etc/init.d/wemo]
+  queue! %[sudo ln -s #{deploy_to}/current/services/wemo /etc/init.d/wemo]
+  queue! %[chmod +x /etc/init.d/wemo]
+  queue! %[sudo update-rc.d wemo defaults]
 end
 
 task :npm => :environment do
