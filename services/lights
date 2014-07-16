@@ -7,7 +7,7 @@
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Lights initscript
+# Short-Description: Lights Init Script
 # Description:       This service is used to manage the lights service
 ### END INIT INFO
 
@@ -18,8 +18,13 @@ case "$1" in
         PATH=$PATH:/home/pi/node/bin NODE_ENV=production node /home/pi/lights/current/index.js > /home/pi/lights/current/log/std.out &
         ;;
     stop)
-        echo "Stopping servoblaster"
+        echo "Stopping Lights Sensor"
         killall node
+        ;;
+    restart)
+        echo "Restarting Lights Sensor"
+        $0 stop
+        $0 start
         ;;
     *)
         echo "Usage: /etc/init.d/lights start|stop"

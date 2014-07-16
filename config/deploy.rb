@@ -34,7 +34,7 @@ task :service => :environment do
   queue! %[sudo rm -f /etc/init.d/lights]
   queue! %[sudo ln -s #{deploy_to}/current/services/lights /etc/init.d/lights]
   queue! %[chmod +x /etc/init.d/lights]
-  queue! %[sudo update-rc.d /etc/init.d/lights defaults]
+  queue! %[sudo update-rc.d lights defaults]
 end
 
 task :npm => :environment do
@@ -49,8 +49,8 @@ task :deploy => :environment do
 
     to :launch do
       invoke :'npm'
-      queue "forever stopall"
-      queue "NODE_ENV=production forever start #{deploy_to}/current/index.js"
+      invoke :'service'
+      queue! %[sudo service lights restart]
     end
   end
 end
