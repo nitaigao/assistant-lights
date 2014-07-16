@@ -54,8 +54,9 @@ task :deploy => :environment do
 
     to :launch do
       invoke :'npm'
-      invoke :'service'
+      invoke :'services'
       queue! %[sudo service lights restart]
+      queue! %[sudo service wemo restart]
     end
   end
 end
