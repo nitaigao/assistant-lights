@@ -1,35 +1,88 @@
-#!/bin/bash
-# /etc/init.d/lights
+#!/bin/sh
 
+NODE_ENV="production"
+NODE_APP='index.js'
+APP_DIR='/home/pi/lights/current';
+PID_FILE=$APP_DIR/log/app.pid
+LOG_FILE=$APP_DIR/log/app.log
+CONFIG_DIR=$APP_DIR/config
+PORT=3000
+NODE_EXEC=/home/pi/node/bin/node
+
+###############
+
+# REDHAT chkconfig header
+
+# chkconfig: - 58 74
+# description: node-app is the script for starting a node app on boot.
 ### BEGIN INIT INFO
-# Provides:          lights
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
+# Provides: node
+# Required-Start:    $network $remote_fs $local_fs
+# Required-Stop:     $network $remote_fs $local_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Lights Init Script
-# Description:       This service is used to manage the lights service
+# Short-Description: start and stop node
+# Description: Node process for app
 ### END INIT INFO
 
+start_app (){
+    if [ -f $PID_FILE ]
+    then
+        echo "$PID_FILE exists, process is already running or crashed"
+        exit 1
+    else
+        echo "Starting node app..."
+        PORT=$PORT NODE_ENV=$NODE_ENV NODE_CONFIG_DIR=$CONFIG_DIR $NODE_EXEC $APP_DIR/$NODE_APP  1>$LOG_FILE 2>&1 &
+        echo $! > $PID_FILE;
+    fi
+}
+
+stop_app (){
+    if [ ! -f $PID_FILE ]
+    then
+        echo "$PID_FILE does not exist, process is not running"
+        exit 1
+    else
+        echo "Stopping $APP_DIR/$NODE_APP ..."
+        echo "Killing `cat $PID_FILE`"
+        kill `cat $PID_FILE`;
+        rm -f $PID_FILE;
+        echo "Node stopped"
+    fi
+}
 
 case "$1" in
     start)
-        echo "Starting Lights Sensor"
-        PATH=$PATH:/home/pi/node/bin NODE_ENV=production node /home/pi/lights/current/index.js > /home/pi/lights/current/log/std.out &
-        ;;
-    stop)
-        echo "Stopping Lights Sensor"
-        killall node
-        ;;
-    restart)
-        echo "Restarting Lights Sensor"
-        $0 stop
-        $0 start
-        ;;
-    *)
-        echo "Usage: /etc/init.d/lights start|stop"
-        exit 1
-        ;;
-esac
+        start_app
+    ;;
 
-exit 0
+    stop)
+        stop_app
+    ;;
+
+    restart)
+        stop_app
+        start_app
+    ;;
+
+    status)
+        if [ -f $PID_FILE ]
+        then
+            PID=`cat $PID_FILE`
+            if [ -z "`ps ef | awk '{print $1}' | grep "^$PID$"`" ]
+            then
+                echo "Node app stopped but pid file exists"
+            else
+                echo "Node app running with pid $PID"
+
+            fi
+        else
+            echo "Node app stopped"
+        fi
+    ;;
+
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+    ;;
+esac
