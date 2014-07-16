@@ -9,20 +9,13 @@ CONFIG_DIR=$APP_DIR/config
 PORT=3000
 NODE_EXEC=/home/pi/node/bin/node
 
-###############
-
-# REDHAT chkconfig header
-
-# chkconfig: - 58 74
-# description: node-app is the script for starting a node app on boot.
 ### BEGIN INIT INFO
-# Provides: node
-# Required-Start:    $network $remote_fs $local_fs
-# Required-Stop:     $network $remote_fs $local_fs
+# Provides:          lights
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: start and stop node
-# Description: Node process for app
+# Short-Description: lights
 ### END INIT INFO
 
 start_app (){

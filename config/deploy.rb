@@ -30,7 +30,7 @@ task :setup => :environment do
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/config"]
 end
 
-task :service => :environment do
+task :services => :environment do
   queue! %[sudo rm -f /etc/init.d/lights]
   queue! %[sudo ln -s #{deploy_to}/current/services/lights /etc/init.d/lights]
   queue! %[chmod +x /etc/init.d/lights]

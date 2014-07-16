@@ -1,11 +1,6 @@
 #!/bin/bash
-# wemo daemon
-# chkconfig: 345 20 80
-# description: wemo daemon
-# processname: wemo
 
 DAEMON_PATH="/"
-
 DAEMON=wemo
 DAEMONOPTS="server"
 
@@ -13,6 +8,15 @@ NAME=wemo
 DESC="Wemo Management Service"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
+
+### BEGIN INIT INFO
+# Provides:          wemo
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: wemo
+### END INIT INFO
 
 case "$1" in
 start)
